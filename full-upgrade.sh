@@ -1,5 +1,5 @@
 #!/bin/bash
-version="$0 v1.0"
+version=1.2
 
 lineWidth=$((`tput cols`-10))
 
@@ -40,7 +40,7 @@ while :; do
     case "${1-}" in
     -h | --help) usage
     exit ;;
-    -v | --version) echo $version
+    -v | --version) echo "$0 v$version"
     exit ;;
     -y | --yes | --assume-yes) assumeYes=1 ;;
     -?*) echo "Unknown option: $1">&2
@@ -55,7 +55,7 @@ trim () {
     local str ellipsis_utf8
     local -i maxlen
 
-    # use explaining variables; avoid magic numbers        
+    # use explaining variables; avoid magic numbers
     str="$*"
     maxlen=$(expr $lineWidth - 3)
 
@@ -80,24 +80,24 @@ if [[ $u ]]; then
   echo -e "Update$([[ $(echo $u|wc -w) > 1 ]]&& echo s) found: $WHITE${u%?}$NOCOLOR"
   if [[ ! $assumeYes ]]; then
     while true; do
-      read -p "Do you want to continue? [Y/n] " yn
-      case $yn in
-          [Yy]* ) break;;
-          [Nn]* ) exit;;
-      esac
+      read -p "Do you want to continue? [Y/n] " -s -n 1 key
+      [[ $key = "" || $key = "y" || $key = "Y" ]] && break
+      [[ $key = "n" || $key = "N" ]] && echo -ne "\r\033[0K" && exit
+      echo -ne "\r\033[0K"
     done
+    echo -ne "\r\033[0K"
   fi
 
   echo -ne "Upgrading package$([[ $(echo $u|wc -w) > 1 ]]&& echo s)... "
   apt-get full-upgrade -y > /dev/null 2>&1 &
   pid=$!
   while kill -0 $pid 2> /dev/null; do
-    log=$(tail /var/log/apt/term.log -n 1)
+    log=$(tail /var/log/apt/term.log -n 1 &)
     if ! [[ $log == Log* ]]; then
       echo -ne "\r\033[0K"
       echo -ne $(trim "${log/%...}")
     fi
-  sleep 1
+  sleep .25
   done
   echo -ne "\r\033[0K"
   echo "Upgrading package$([[ $(echo $u|wc -w) > 1 ]]&& echo s)... Done"
