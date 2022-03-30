@@ -1,3 +1,4 @@
+[![button](https://files.teunjojo.com/theme/download-button.svg)](https://files.teunjojo.com/full-upgrade/latest/full-upgrade.sh)
 # full-upgrade
 Shell script that installs apt updates.
 
