@@ -5,8 +5,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge)](https://github.com/teunjojo)&nbsp;
 [![Donate](https://img.shields.io/badge/Donate-yellow?style=for-the-badge)](https://www.paypal.com/donate/?hosted_button_id=U9YA79HDTWTZW)
 
-# full-upgrade
-Shell script that installs apt updates.
+# full-upgrade A cleaner way to update your APT packages.
 
 ## usage
 usage: ./full-upgrade.sh [OPTION]
